@@ -19,15 +19,21 @@ while retries < max_retries:
             title = ''.join(t for t in h1_elem.contents if t.name is None).strip()
         else:
             title = None
-        #title = soup.select_one(".productDetailPage_productUpper-heading__IKsLu h1").get_text(strip=True)
-        brand = soup.select_one(".productDetailPage_productUpper-heading__IKsLu h1 a").get_text(strip=True)
-        current_price = soup.select_one(".productDetailPage_priceContainer__8AIXw span").get_text(strip=True)
-        original_price = soup.select_one(".productDetailPage_listPrice__VPPgw").get_text(strip=True)
-        #original_price_elem = soup.select_one(".productDetailPage_listPrice__VPPgw")
-        #original_price = original_price_elem.get_text(strip=True) if original_price_elem else None
-        # original_price = soup.select_one(".productDetailPage_unitPrice__s2XgI").get_text(strip=True)
-        rating = soup.select_one(".productDetailPage_ratingRow__VNeGN").get_text(strip=True)
-        #num_reviews = soup.select_one(".customerreviews_chartRow__Wz8ZS p").get_text(strip=True)
+
+        brand_elem = soup.select_one(".productDetailPage_productUpper-heading__IKsLu h1 a")
+        brand = brand_elem.get_text(strip=True) if brand_elem else None
+
+        current_price_elem = soup.select_one(".productDetailPage_priceContainer__8AIXw span")
+        current_price = current_price_elem.get_text(strip=True) if current_price_elem else None
+
+        original_price_elem = soup.select_one(".productDetailPage_listPrice__VPPgw")
+        original_price = original_price_elem.get_text(strip=True) if original_price_elem else None
+
+        num_reviews_elem = soup.select_one(".producthighlight_reviewCount__p17d1")
+        num_reviews = num_reviews_elem.get_text(strip=True) if num_reviews_elem else None
+        
+        #rating = soup.select_one(".productDetailPage_ratingRow__VNeGN").get_text(strip=True)
+        num_reviews = soup.select_one(".producthighlight_reviewCount__p17d1").get_text(strip=True)
 
         # Review samples
         reviews = [r.get_text(strip=True) for r in soup.select(".customerreviews_reviewCard__4V1EE")]
@@ -38,12 +44,13 @@ while retries < max_retries:
             time.sleep(delay)
             retries += 1
             delay *= 2
+
 scraping_line = [
      f"title is {title}",
      f"brand is {brand}",
      f"current_price is {current_price}",
      f"original_price is {original_price}",
-     f"rating is {rating}",
+     f"num_reviews is {num_reviews}",
 ]
 #print(title, brand, current_price, original_price, rating, num_reviews)
 for line in scraping_line:
